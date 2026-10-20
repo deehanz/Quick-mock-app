@@ -35,6 +35,12 @@ export default function App() {
   const [fineTuneModalOpen, setFineTuneModalOpen] = useState(false);
   const [promptLogModalOpen, setPromptLogModalOpen] = useState(false);
   const [selectedUnivForEssay, setSelectedUnivForEssay] = useState<string>('');
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
 
   // Handle completion of onboarding wizard
   const handleOnboardingComplete = (session: UserSession) => {
@@ -101,7 +107,7 @@ export default function App() {
         return prev.filter((u) => u.id !== univ.id);
       }
       if (prev.length >= 3) {
-        alert('You can compare up to 3 universities simultaneously.');
+        showToast('You can compare up to 3 universities simultaneously.');
         return prev;
       }
       return [...prev, univ];
@@ -149,6 +155,14 @@ export default function App() {
         userName={profile.name}
         onLogout={handleLogout}
       />
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed top-18 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-xl bg-primary text-white text-[12px] font-semibold shadow-xl border border-white/10 flex items-center gap-2">
+          <span className="material-symbols-outlined text-secondary text-[16px]">info</span>
+          <span>{toast}</span>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 w-full max-w-xl mx-auto pt-16 flex flex-col">
